@@ -15,6 +15,7 @@ class Playfair:
         self.extended = False
 
         self.init_encrypt(input_str) if mode == 'e' else self.init_decrypt(input_str)
+        print(self.KEY)
         self.encrypt() if mode == 'e' else self.decrypt()
 
     @staticmethod
@@ -67,18 +68,19 @@ class Playfair:
                     chunk.x2 = i
                     chunk.y2 = j
 
+        # print(chunk.x1, chunk.y1, chunk.x2, chunk.y2)
         if chunk.x1 == chunk.x2:
-            chunk.x1 += 1
-            chunk.x2 += 1
-            chunk.x1 %= 5
-            chunk.x2 %= 5
-        elif chunk.y1 == chunk.y2:
             chunk.y1 += 1
             chunk.y2 += 1
             chunk.y1 %= 5
             chunk.y2 %= 5
+        elif chunk.y1 == chunk.y2:
+            chunk.x1 += 1
+            chunk.x2 += 1
+            chunk.x1 %= 5
+            chunk.x2 %= 5
         else:
-            chunk.x1, chunk.y1 = chunk.x2, chunk.y2
+            chunk.y1, chunk.y2 = chunk.y2, chunk.y1
 
         chunk.list = [self.KEY[chunk.x1][chunk.y1], self.KEY[chunk.x2][chunk.y2]]
 
@@ -97,17 +99,17 @@ class Playfair:
                     chunk.y2 = j
 
         if chunk.x1 == chunk.x2:
-            chunk.x1 -= 1
-            chunk.x2 -= 1
-            chunk.x1 %= 5
-            chunk.x2 %= 5
-        elif chunk.y1 == chunk.y2:
             chunk.y1 -= 1
             chunk.y2 -= 1
             chunk.y1 %= 5
             chunk.y2 %= 5
+        elif chunk.y1 == chunk.y2:
+            chunk.x1 -= 1
+            chunk.x2 -= 1
+            chunk.x1 %= 5
+            chunk.x2 %= 5
         else:
-            chunk.x1, chunk.y1 = chunk.x2, chunk.y2
+            chunk.y1, chunk.y2 = chunk.y2, chunk.y1
 
         chunk.list = [self.KEY[chunk.x1][chunk.y1], self.KEY[chunk.x2][chunk.y2]]
 
@@ -124,8 +126,8 @@ class Chunk:
 
 
 if __name__ == '__main__':
-    input_str = 'cdab'
-    key = 'key'
+    input_str = 'bf'
+    key = 'a'
     # mode = 'e'
     mode = 'd'
     Playfair(input_str, key, mode)
