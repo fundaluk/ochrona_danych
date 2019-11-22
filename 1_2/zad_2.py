@@ -2,42 +2,24 @@ import random
 
 
 class Polyalphabetic:
-    KEY = {
-        'a': ['q', '3'],
-        'b': ['w', '1'],
-        'c': ['e', '4'],
-        'd': ['r', '5'],
-        'e': ['t', '9'],
-        'f': ['y', '2'],
-        'g': ['u', '6'],
-        'h': ['i', '8'],
-        'i': ['o', '7'],
-        'j': ['p', '0'],
-        'k': ['a', '!'],
-        'l': ['s', '@'],
-        'm': ['d', '#'],
-        'n': ['f', '$'],
-        'o': ['g', '%'],
-        'p': ['h', '^'],
-        'q': ['j', '&'],
-        'r': ['k', '*'],
-        's': ['l', '('],
-        't': ['z', ')'],
-        'u': ['x', '-'],
-        'v': ['c', '_'],
-        'w': ['v', '?'],
-        'x': ['b', '+'],
-        'y': ['n', '.'],
-        'z': ['m', ',']
-           }
-
     def __init__(self, input_string, _mode):
         self.plaintext = ''
         self.ciphertext = ''
+        self.flattened = []
+        self.KEY = {}
+        self.read_key()
         self.KEY[' '] = [' ', ' ']
         self.init_decrypt(input_string) if _mode == 'd' else self.init_encrypt(input_string)
         self.validate()
         self.decrypt() if _mode == 'd' else self.encrypt()
+
+    def read_key(self):
+        with open('key', 'r') as f:
+            input_str = f.read()
+            for item in input_str.split('\n'):
+                entry = item.split()
+                self.KEY[entry[0]] = [entry[1], entry[2]]
+            print(self.KEY)
 
     def init_decrypt(self, input_string):
         self.ciphertext = input_string.lower()
@@ -50,9 +32,9 @@ class Polyalphabetic:
         all_chars += self.KEY.keys()
         for val in self.KEY.values():
             all_chars += val
-        assert(len(all_chars) % 3 == 0)
+        assert (len(all_chars) % 3 == 0)
         for c in self.plaintext + self.ciphertext:
-            assert(c in all_chars + [' '])
+            assert (c in all_chars + [' '])
 
     def decrypt(self):
         flatten = lambda l: [item for sublist in l for item in sublist]
